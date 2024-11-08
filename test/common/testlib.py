@@ -278,6 +278,17 @@ class Browser:
         except FileNotFoundError:
             pass
 
+        try:
+            query_shadow_dom = (Path(__file__).parent.parent.parent /
+                                "node_modules/query-selector-shadow-dom/dist/querySelectorShadowDom.js"
+                                ).read_text()
+            self.bidi("script.addPreloadScript", quiet=True, functionDeclaration="() => {"
+                      f"  {query_shadow_dom};"
+                      "  window.querySelectorAllDeep = querySelectorShadowDom.querySelectorAllDeep;"
+                      "}")
+        except FileNotFoundError:
+            pass
+
         if coverage_label:
             self.cdp_command("Profiler.enable")
             self.cdp_command("Profiler.startPreciseCoverage", callCount=False, detailed=True)

@@ -10,6 +10,8 @@ window.ph_select = function(sel) {
             throw new Error("Using ':contains' when window.Sizzle is not available.");
         }
         return window.Sizzle(sel);
+    } else if (window.querySelectorAllDeep) {
+        return window.querySelectorAllDeep(sel);
     } else {
         return Array.from(document.querySelectorAll(sel));
     }
